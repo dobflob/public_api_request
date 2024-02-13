@@ -1,0 +1,68 @@
+Get and display 12 random users
+With the information provided from The Random User Generator API, send a single request to the API.
+
+Use the response data to display 12 users, along with some basic information for each:
+Image
+First and Last Name
+Email
+City or location
+Refer to the mockups and the comments in the index.html file for an example of what info should be displayed on the page and how it should be styled.
+NOTE: When adding or concatenating to the DOM, avoid doing this: element.innerHTML += 'HTML string'. That technique rewrites the entire DOM. This is problematic because any rewritten elements won't retain any event listeners that were attached to the DOM before the rewrite occurs. Use this method instead: element.insertAdjacentHTML('beforeend', 'HTML string'). That technique will allow you to add strings of HTML to the DOM without disrupting what already exists in the DOM.
+
+Create a modal window
+When any part of an employee item in the directory is clicked, a modal window should pop up with the following details displayed:
+Image
+Name
+Email
+City or location
+Cell Number
+Detailed Address, including street name and number, state or country, and postcode.
+Birthday
+Make sure there’s a way to close the modal window
+Refer to the mockups and the comments in the index.html file for an example of what info should be displayed on the page and how it should be styled.
+Finishing the project
+The final stage of the project is perhaps the most important. This is where your developer skills really shine as you carefully double-check that you've accomplished all requirements and that your project is ready for submission.
+
+Code comments - It’s a best practice for development code to be well commented. Replace provided comments with your own to briefly describe your code.
+Code readability - Readability is second only to functionality. Double-check your code to ensure the spacing and indentation are consistent.
+Cross-browser consistency - To pass, your project only needs to work in Chrome, but it’s common for developers to test their projects in multiple browsers to know how they will perform out in the wild.
+Quality Assurance Testing - This is the keystone step in the development process.
+Open and run your app.
+Open the Chrome DevTools console.
+Pretend to be a user and test all aspects of functionality and every possible state of the app, while monitoring the console for bugs and resolving any that arise.
+Pro Tip
+Before submitting your project it's always a good idea to get an additional pair of eyes on it. This will avoid your project from being returned to you if you missed one of the requirements. You can share a link to your GitHub repository in the #review-my-project channel on Slack and a fellow student or staff member will happily have a look at it.
+
+Extra Credit
+To get an "exceeds" rating, complete all of the steps below:
+
+ 3 steps
+Add search functionality
+Add a way to filter the directory by name.
+
+You’ll need to adjust your API request to retrieve a user nationality that will only return data in the English alphabet.
+Example markup for this feature is included in the HTML comments.
+NOTE: Your search feature should filter results that are already on the page. So don't request new info from the API for your search.
+
+Add modal toggle functionality
+Add a way to toggle back and forth between employees when the modal window is open.
+
+There should be no errors once the end or beginning of the list is reached.
+Example markup for this feature is included in the HTML comments.
+Make it your own
+Add some custom styling to personalize it and make it stand out.
+
+Add or change at least one of the following CSS styles:
+
+color
+background color
+font
+box or text shadows
+Document your style changes in your README.md file and the project submission notes.
+
+Do not alter the layout or position of the important elements on the page.
+NOTE: Getting an "Exceed Expectations" grade.
+
+See the rubric in the "How You'll Be Graded" tab above for details on what you need to receive an "Exceed Expectations" grade.
+Passing grades are final. If you try for the "Exceeds Expectations" grade, but miss an item and receive a “Meets Expectations” grade, you won’t get a second chance. Exceptions can be made for items that have been misgraded in review.
+Always mention in the comments of your submission or any resubmission, what grade you are going for. Some students want their project to be rejected if they do not meet all Exceeds Expectations Requirements, others will try for all the "exceeds" requirement but do not mind if they pass with a Meets Expectations grade. Leaving a comment in your submission will help the reviewer understand which grade you are specifically going for
