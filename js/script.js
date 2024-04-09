@@ -44,7 +44,6 @@ function createSearchForm() {
     return document.querySelector('form');
 };
 
-/* Display Functions */
 /**
  * Builds the skeleton of the modal (all the parts that don't change between employees)
  */
@@ -104,6 +103,7 @@ function displayEmployeeGrid(employees) {
  */
 function displayEmployeeDetails(index) {
     const employee = filteredEmployees[index];
+    const employeeBirthday = transformDate(employee.dob.date);
     const infoHtml = `
         <img class="modal-img" src="${employee.picture.large}" alt="${employee.name.first}'s profile picture" title="${employee.name.first}'s profile picture">
         <h3 id="name" class="modal-name cap">${employee.name.first} ${employee.name.last}</h3>
@@ -112,7 +112,7 @@ function displayEmployeeDetails(index) {
         <hr>
         <p class="modal-text">${employee.cell}</p>
         <p class="modal-text">${employee.location.street.number} ${employee.location.street.name}, ${employee.location.city}, ${employee.location.state} ${employee.location.postcode}</p>
-        <p class="modal-text"></p>
+        <p class="modal-text">Brithday: ${employeeBirthday}</p>
     `;
 
     modalInfoContainer.insertAdjacentHTML('beforeend', infoHtml);
@@ -167,6 +167,21 @@ function filterEmployees(text) {
     
     displayEmployeeGrid(filteredEmployees);
 }
+
+/**
+ * Called by @function displayEmployeeDetails()
+ * Stores parts of date string into day, month, and year variables
+ * @param {string} dateString 
+ * @returns formatted date string: mm/dd/yyyy
+ */
+function transformDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDay();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    return `${month}/${day}/${year}`;
+};
 
 /* Event Handlers */
 search.addEventListener('click', e => {
