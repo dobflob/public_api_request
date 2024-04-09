@@ -171,6 +171,19 @@ search.addEventListener('click', e => {
     }
 });
 
+search.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+        if (searchInput.value && cardList.length) {
+            const searchText = searchInput.value;
+            filteredEmployees = [];
+            filterEmployees(searchText);
+        } else if (cardList.length < employees.length) {
+            filteredEmployees = employees;
+            displayEmployeeGrid(filteredEmployees);
+        }
+    }
+});
+
 gallery.addEventListener('click', e => {
     if (e.target.id !== 'gallery') {
         employeeIndex = getEmployeeIndex(e.target);
