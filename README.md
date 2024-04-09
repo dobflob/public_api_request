@@ -20,6 +20,8 @@ Treehouse Tech Degree Project 5: Public API Requests
     - Changed font-family to Urbanist
 - card-text class
     - Changed font color to darker grey for all states
+- modal-name
+    - Changed color to blue
 - modal buttons
     - Added hover state to close button; hover has a brick red background-color
     - Changed hover state for nav buttons; background-color is now blue

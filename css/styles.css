@@ -167,6 +167,7 @@ header h1 {
 
 .modal-name {
     margin-bottom: 5px;
+    color: rgba(0, 64, 127, 0.8);
 }
 
 .modal-text {
