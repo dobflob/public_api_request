@@ -112,7 +112,7 @@ function displayEmployeeDetails(index) {
         <hr>
         <p class="modal-text">${employee.cell}</p>
         <p class="modal-text">${employee.location.street.number} ${employee.location.street.name}, ${employee.location.city}, ${employee.location.state} ${employee.location.postcode}</p>
-        <p class="modal-text">Brithday: ${employeeBirthday}</p>
+        <p class="modal-text">Birthday: ${employeeBirthday}</p>
     `;
 
     modalInfoContainer.insertAdjacentHTML('beforeend', infoHtml);
