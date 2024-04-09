@@ -28,6 +28,9 @@ fetch('https://randomuser.me/api/?results=12&nat=us&exc=gender,login,registered,
     .then(employees => displayEmployeeGrid(employees));
 
 /* Display Functions */
+/**
+ * Builds the search area and displays on the page
+ */
 function createSearchForm() {
     const searchContainer = document.querySelector('.search-container');
     const html = `
@@ -41,6 +44,10 @@ function createSearchForm() {
     return document.querySelector('form');
 };
 
+/* Display Functions */
+/**
+ * Builds the skeleton of the modal (all the parts that don't change between employees)
+ */
 function createModalSkeleton() {
     const modalHtml = `
         <div class="modal-container hide">
@@ -65,7 +72,9 @@ function createModalSkeleton() {
 };
 
 /** 
+ * Creates the employee cards and adds them to the gallery to be displayed on page
  * Gets called by the fetch promise chain to display initial grid view
+ * @param {array} employees array of employee objects returned from random users api or from @function filterEmployees()
  */
 function displayEmployeeGrid(employees) {
     gallery.innerHTML = '';
@@ -89,8 +98,9 @@ function displayEmployeeGrid(employees) {
 };
 
 /**
- * Called when a user clicks an employee card from the grid OR uses the modal navigation to view prev/next employee - results must have returned from API before this can be called, so no need for async
- * @param {number} employeeIndex 
+ * Creates the employee specific DOM elements to insert within the modal skeleton for display
+ * Called by gallery click event and by modalNext, modalPrev click events
+ * @param {number} index the index number from the gallery HTMLCollection array set in @function displayEmployeeGrid()
  */
 function displayEmployeeDetails(index) {
     const employee = filteredEmployees[index];
@@ -113,7 +123,8 @@ function displayEmployeeDetails(index) {
 };
 
 /**
- * Called when user closes modal or navigates between employees within modal - modal doesn't open until user clicks a card, so results must have returned to be called, so no need for async.
+ * Clears the employee details from the modal skeleton
+ * Called by modalClose, modalNext, modalPrev click events
  */
 function clearEmployeeDetails() {
     modalInfoContainer.innerHTML = '';
@@ -121,9 +132,9 @@ function clearEmployeeDetails() {
 
 /* Helper Functions */
 /**
- * Called when user clicks an employee card in the grid; results must have already returned for this to be called, so no need for async.
- * @param {*} element 
- * @returns 
+ * Called by gallery click event
+ * @param {*} element html element that is event target
+ * @returns index of the clicked card
  */
 function getEmployeeIndex(element) {
     let selectedEmployee = '';
@@ -141,7 +152,7 @@ function getEmployeeIndex(element) {
 };
 
 /**
- * Gets called when user clicks the search button AND there are cards displayed in grid; this requires that results have already been returned from the API, so no need for async.
+ * Called by search click and keyup events when there are cards displayed in grid
  * @param {*} text 
  */
 function filterEmployees(text) {
