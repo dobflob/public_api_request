@@ -9,9 +9,23 @@ const modalPrev = document.querySelector('#modal-prev');
 const modalNext = document.querySelector('#modal-next');
 
 let cardList;
-let employees = testEmployees;
+let employees = []; // update to get data from random user api
+let filteredEmployees = []; // this may need to await server response (assign within promise chain)
 let employeeIndex = '';
-let filteredEmployees = employees;
+
+/* Get Data from API */
+/**
+ * Make API call to get 12 random users
+ * Parse respone to JSON
+ * set the value of employees variable
+ * set the value of the filteredEmployees variable
+ * call displayEmployeeGrid to populate gallery with results
+ */
+fetch('https://randomuser.me/api/?results=12&nat=us&exc=gender,login,registered,phone,id,nat')
+    .then(results => results.json())
+    .then(data => employees = data.results)
+    .then(employees => filteredEmployees = employees)
+    .then(employees => displayEmployeeGrid(employees));
 
 /* Display Functions */
 function createSearchForm() {
@@ -50,6 +64,9 @@ function createModalSkeleton() {
     return document.querySelector('.modal-container');
 };
 
+/** 
+ * Gets called by the fetch promise chain to display initial grid view
+ */
 function displayEmployeeGrid(employees) {
     gallery.innerHTML = '';
     employees.forEach(employee => {
@@ -70,8 +87,9 @@ function displayEmployeeGrid(employees) {
         cardList = [...gallery.children];
     });
 };
+
 /**
- * Call function when user clicks on an employee card from the grid OR uses the modal navigation to view prev/next employee
+ * Called when a user clicks an employee card from the grid OR uses the modal navigation to view prev/next employee - results must have returned from API before this can be called, so no need for async
  * @param {number} employeeIndex 
  */
 function displayEmployeeDetails(index) {
@@ -94,14 +112,21 @@ function displayEmployeeDetails(index) {
     };
 };
 
+/**
+ * Called when user closes modal or navigates between employees within modal - modal doesn't open until user clicks a card, so results must have returned to be called, so no need for async.
+ */
 function clearEmployeeDetails() {
     modalInfoContainer.innerHTML = '';
 };
 
 /* Helper Functions */
+/**
+ * Called when user clicks an employee card in the grid; results must have already returned for this to be called, so no need for async.
+ * @param {*} element 
+ * @returns 
+ */
 function getEmployeeIndex(element) {
     let selectedEmployee = '';
-    //cardList = [...gallery.children]; // I think this may need to be global....
     
     if (element.className === 'card') {
         selectedEmployee = element;
@@ -115,6 +140,10 @@ function getEmployeeIndex(element) {
     return employeeIndex;
 };
 
+/**
+ * Gets called when user clicks the search button AND there are cards displayed in grid; this requires that results have already been returned from the API, so no need for async.
+ * @param {*} text 
+ */
 function filterEmployees(text) {
     employees.forEach(employee => {
         let firstName = employee.name.first.toLowerCase();
@@ -130,13 +159,15 @@ function filterEmployees(text) {
 
 /* Event Handlers */
 search.addEventListener('click', e => {
-    if (e.target.id === 'search-submit' && searchInput.value) {
-        const searchText = searchInput.value;
-        filteredEmployees = [];
-        filterEmployees(searchText);
-    } else if (cardList.length < employees.length) {
-        filteredEmployees = employees;
-        displayEmployeeGrid(employees);
+    if (e.target.id === 'search-submit') {
+        if (searchInput.value && cardList.length) {
+            const searchText = searchInput.value;
+            filteredEmployees = [];
+            filterEmployees(searchText);
+        } else if (cardList.length < employees.length) {
+            filteredEmployees = employees;
+            displayEmployeeGrid(filteredEmployees);
+        }
     }
 });
 
@@ -180,5 +211,3 @@ modalNext.addEventListener('click', e => {
     clearEmployeeDetails();
     displayEmployeeDetails(employeeIndex);
 });
-
-displayEmployeeGrid(employees);
