@@ -1,16 +1,25 @@
 /* Global Variables */
 const search = createSearchForm();
+const searchInput = document.getElementById('search-input');
 const gallery = document.getElementById('gallery');
 const modal = createModalSkeleton();
 const modalClose = document.querySelector('.modal-close-btn');
+const modalInfoContainer = document.querySelector('.modal-info-container');
+const modalPrev = document.querySelector('#modal-prev');
+const modalNext = document.querySelector('#modal-next');
+
+let cardList;
+let employees = testEmployees;
+let employeeIndex = '';
+let filteredEmployees = employees;
 
 /* Display Functions */
 function createSearchForm() {
     const searchContainer = document.querySelector('.search-container');
     const html = `
-        <form action='#' method='get'>
-            <input type='search' id='search-input' class='search-input' placeholder='Search...'>
-            <input type='submit' value='&#x1F50D;' id='search-submit class='search-submit'>
+        <form action="#" method="get">
+            <input type="search" id="search-input" class="search-input" placeholder="Search...">
+            <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
         </form>
     `;
 
@@ -20,74 +29,156 @@ function createSearchForm() {
 
 function createModalSkeleton() {
     const modalHtml = `
-        <div class='modal-container hide'>
-            <div class='modal'>
-                <button type='button' id='modal-close-btn' class='modal-close-btn'>
+        <div class="modal-container hide">
+            <div class="modal">
+                <button type="button" id="modal-close-btn" class="modal-close-btn">
                     <strong>X</strong>
                 </button>
 
-                <div class='modal-info-container'>
+                <div class="modal-info-container">
                 </div>
             </div>
 
-            <div class='modal-btn-container'>
-                <button type='button' id='modal-prev' class='modal-prev btn'>Prev</button>
-                <button type='button' id='modal-next' class='modal-next btn'>Next</button>
+            <div class="modal-btn-container">
+                <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                <button type="button" id="modal-next" class="modal-next btn">Next</button>
             </div>
         </div>
     `;
 
-    document.body.insertAdjacentHTML(`beforeend`, modalHtml);
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
     return document.querySelector('.modal-container');
 };
 
 function displayEmployeeGrid(employees) {
+    gallery.innerHTML = '';
     employees.forEach(employee => {
         const html = `
-            <div class='card'>
-                <div class='card-img-container'>
-                    <img class='card-img' src='' alt=''>
+            <div class="card">
+                <div class="card-img-container">
+                    <img class="card-img" src="${employee.picture.large}" alt="${employee.name.first}'s profile picture" title="${employee.name.first}'s profile picture">
                 </div>
-                <div class='card-info-container'>
-                    <h3 id='name' class='card-name' cap><h3>
-                    <p class='card-text'></p>
-                    <p class='card-text cap'></p>
+                <div class="card-info-container">
+                    <h3 id="name" class="card-name cap">${employee.name.first} ${employee.name.last}</h3>
+                    <p class="card-text">${employee.email}</p>
+                    <p class="card-text cap">${employee.location.city}, ${employee.location.state}</p>
                 </div>
             </div>
         `;
 
-        gallery.insertAdjacentHTML(`beforeend`, html);
+        gallery.insertAdjacentHTML('beforeend', html);
+        cardList = [...gallery.children];
     });
 };
 /**
  * Call function when user clicks on an employee card from the grid OR uses the modal navigation to view prev/next employee
- * @param {*} employee 
+ * @param {number} employeeIndex 
  */
-function displayEmployeeDetails(employee) {
-    let modalInfoContainer = document.querySelector('.modal-info-container');
+function displayEmployeeDetails(index) {
+    const employee = filteredEmployees[index];
     const infoHtml = `
-        <img class='modal-img' src='' alt=''>
-        <h3 id='name' class='modal-name cap'></h3>
-        <p class='modal-text'></p>
-        <p class='modal-text'></p>
+        <img class="modal-img" src="${employee.picture.large}" alt="${employee.name.first}'s profile picture" title="${employee.name.first}'s profile picture">
+        <h3 id="name" class="modal-name cap">${employee.name.first} ${employee.name.last}</h3>
+        <p class="modal-text">${employee.email}</p>
+        <p class="modal-text">${employee.location.city}</p>
         <hr>
-        <p class='modal-text'></p>
-        <p class='modal-text'></p>
-        <p class='modal-text'></p>
+        <p class="modal-text">${employee.cell}</p>
+        <p class="modal-text">${employee.location.street.number} ${employee.location.street.name}, ${employee.location.city}, ${employee.location.state} ${employee.location.postcode}</p>
+        <p class="modal-text"></p>
     `;
 
-    modalInfoContainer.insertAdjacentHTML(`beforeend`, infoHtml);
+    modalInfoContainer.insertAdjacentHTML('beforeend', infoHtml);
     
     if (modal.classList.contains('hide')) {
         modal.classList.remove('hide');
     };
 };
 
+function clearEmployeeDetails() {
+    modalInfoContainer.innerHTML = '';
+};
+
+/* Helper Functions */
+function getEmployeeIndex(element) {
+    let selectedEmployee = '';
+    //cardList = [...gallery.children]; // I think this may need to be global....
+    
+    if (element.className === 'card') {
+        selectedEmployee = element;
+    } else if (element.tagName === 'DIV') {
+        selectedEmployee = element.parentNode;
+    } else {
+        selectedEmployee = element.parentNode.parentNode;
+    }
+
+    employeeIndex = cardList.indexOf(selectedEmployee);
+    return employeeIndex;
+};
+
+function filterEmployees(text) {
+    employees.forEach(employee => {
+        let firstName = employee.name.first.toLowerCase();
+        let lastName = employee.name.last.toLowerCase();
+
+        if(firstName.includes(text.toLowerCase()) || lastName.includes(text.toLowerCase())) {
+            filteredEmployees.push(employee);
+        }
+    });
+    
+    displayEmployeeGrid(filteredEmployees);
+}
+
 /* Event Handlers */
-modalClose.addEventListener('click', () => {
-    modal.classList.add('hide');
+search.addEventListener('click', e => {
+    if (e.target.id === 'search-submit' && searchInput.value) {
+        const searchText = searchInput.value;
+        filteredEmployees = [];
+        filterEmployees(searchText);
+    } else if (cardList.length < employees.length) {
+        filteredEmployees = employees;
+        displayEmployeeGrid(employees);
+    }
 });
 
+gallery.addEventListener('click', e => {
+    if (e.target.id !== 'gallery') {
+        employeeIndex = getEmployeeIndex(e.target);
+        displayEmployeeDetails(employeeIndex);
+    }
+});
 
-displayEmployeeDetails();
+modalClose.addEventListener('click', () => {
+    modal.classList.add('hide');
+    modalInfoContainer.innerHTML = ``;
+    clearEmployeeDetails();
+});
 
+modalPrev.addEventListener('click', e => {
+    let prevIndex;
+
+    if (employeeIndex === 0) {
+        prevIndex = filteredEmployees.length - 1;
+    } else {
+        prevIndex = employeeIndex - 1;
+    }
+
+    employeeIndex = prevIndex;
+    clearEmployeeDetails();
+    displayEmployeeDetails(employeeIndex);
+});
+
+modalNext.addEventListener('click', e => {
+    let nextIndex;
+
+    if (employeeIndex === filteredEmployees.length - 1) {
+        nextIndex = 0;
+    } else {
+        nextIndex = employeeIndex + 1;
+    }
+
+    employeeIndex = nextIndex;
+    clearEmployeeDetails();
+    displayEmployeeDetails(employeeIndex);
+});
+
+displayEmployeeGrid(employees);
