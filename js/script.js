@@ -170,13 +170,13 @@ function filterEmployees(text) {
 
 /**
  * Called by @function displayEmployeeDetails()
- * Stores parts of date string into day, month, and year variables
+ * Stores parts of date string into date, month, and year variables
  * @param {string} dateString 
  * @returns formatted date string: mm/dd/yyyy
  */
 function transformDate(dateString) {
     const date = new Date(dateString);
-    const day = date.getDay();
+    const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
